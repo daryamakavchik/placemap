@@ -46,7 +46,7 @@
     font-size: 30px;
     user-select: none;
     line-height: 70px;
-    border-top: 3px solid white;
+    /* border-top: 2px solid white; */
     position: absolute;
     left: 0;
     bottom: 0;
@@ -82,5 +82,5 @@ input:focus::placeholder {
 ::placeholder { 
     color: rgba(255, 255, 255, 0.752);
     opacity: 1; 
-    padding-left: 10px;
+    padding-left: 80px;
   }
