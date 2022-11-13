@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './style.module.css';
 import icon from '../images/location.png';
+import search from '../images/search.png';
 
 export default class App extends React.Component {
     constructor() {
@@ -38,6 +39,7 @@ export default class App extends React.Component {
             { inputValue.replace(/ /g, "\u00a0") }
           </span>
           </div>
+          <img src={search} className={styles.searchimg} />
           <img src={icon} className={styles.img} />
         </div>
         </div>
