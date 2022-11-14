@@ -14,13 +14,14 @@
       height: 100%;
       width: 100%;
     }
-
     .widgetcenter {
       position: absolute;
-      top: 43%;
-      left: 43%;
-      margin: 0 auto;
-      transform: translate(50%, 50%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .overlay{
+      background-color: rgba(113, 108, 108, 0.7);
     }
   </style>
   <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
@@ -182,6 +183,7 @@
 
         view.when(function () {
           search.container.classList.add("widgetcenter");
+          document.querySelector('.esri-ui-manual-container').classList.add('overlay');
         });
 
         const graphicsLayer = new GraphicsLayer();
@@ -222,8 +224,6 @@
       });
   </script>
 </head>
-
-<body>
 
   <body>
     <div>
