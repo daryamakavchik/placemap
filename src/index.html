@@ -1,53 +1,47 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
-    <title>ArcGIS API for JavaScript Tutorials: Display a map</title>
-    <style>
-      html,
-      body,
-      #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
-    </style>
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.24/esri/themes/light/main.css"
-    />
-    <link rel="stylesheet" src="./style.css" />
-    <!-- <script src="./index.js" type="text/babel"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js"></script>
-    <script src="https://js.arcgis.com/4.24/"></script>
-    <script>
-      require([
-        "esri/config",
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/Graphic",
-        "esri/layers/GraphicsLayer",
-        "esri/layers/FeatureLayer",
-        "esri/widgets/Search",
-        "esri/rest/locator",
-        "esri/rest/route",
-        "esri/rest/support/RouteParameters",
-        "esri/rest/support/FeatureSet",
-      ], function (
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>ArcGIS API for JavaScript Tutorials: Display a map</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js"></script>
+  <script src="https://js.arcgis.com/4.24/"></script>
+  <script>
+
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Search",
+      "esri/rest/locator",
+      "esri/rest/route",
+      "esri/rest/support/RouteParameters",
+      "esri/rest/support/FeatureSet",
+    ],
+
+      function (
         esriConfig,
         Map,
         MapView,
         Graphic,
         GraphicsLayer,
         FeatureLayer,
-        BasemapToggle,
-        BasemapGallery,
         Search,
         locator,
         route,
@@ -209,15 +203,15 @@
           popupTemplate: popupTemplate,
         });
         graphicsLayer.add(pointGraphic);
-        const layer = new FeatureLayer({
-          url: "https://services7.arcgis.com/JdS7wLnf7kKVAGjh/arcgis/rest/services/my_points/FeatureServer/0",
-        });
-        map.add(layer);
       });
-    </script>
-  </head>
+  </script>
+</head>
+
+<body>
+
   <body>
-    <div class="overlay" id="root"></div>
-      <div id="viewDiv"></div>
+    <div id="root" class="root"></div>
+    <div id="viewDiv"></div>
   </body>
+
 </html>
