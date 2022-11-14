@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>ArcGIS API for JavaScript Tutorials: Display a map</title>
+  <link rel="stylesheet" src="style.css" />
   <style>
     html,
     body,
@@ -12,6 +13,14 @@
       margin: 0;
       height: 100%;
       width: 100%;
+    }
+
+    .widgetcenter {
+      position: absolute;
+      top: 43%;
+      left: 43%;
+      margin: 0 auto;
+      transform: translate(50%, 50%);
     }
   </style>
   <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
@@ -166,7 +175,14 @@
           view: view,
         });
 
-        view.ui.add(search, "top-left");
+        view.ui.add({
+          component: search,
+          position: "manual"
+        });
+
+        view.when(function () {
+          search.container.classList.add("widgetcenter");
+        });
 
         const graphicsLayer = new GraphicsLayer();
         map.add(graphicsLayer);
@@ -210,8 +226,9 @@
 <body>
 
   <body>
-    <div id="root" class="root"></div>
-    <div id="viewDiv"></div>
+    <div>
+      <div id="viewDiv"></div>
+    </div>
   </body>
 
 </html>
