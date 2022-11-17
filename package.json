@@ -21,6 +21,8 @@
   "homepage": "https://github.com/daryamakavchik/placemap#readme",
   "dependencies": {
     "@arcgis/core": "^4.25.1",
+    "@dojo/shim": "^2.0.0",
+    "@types/arcgis-js-api": "^4.25.0",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
