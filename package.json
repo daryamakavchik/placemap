@@ -7,8 +7,6 @@
   "dependencies": {
     "@arcgis/core": "^4.25.4",
     "@arcgis/webpack-plugin": "^4.22.0",
-    "@esri/react-arcgis": "^5.2.0",
-    "esri-loader": "^2.16.0",
     "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
