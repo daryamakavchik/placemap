@@ -18,3 +18,7 @@ body,
 .overlay {
   background-color: rgba(113, 108, 108, 0.7);
 }
+
+.nopointer{
+  pointer-events: none;
+}

@@ -5,6 +5,7 @@ import Graphic from "@arcgis/core/Graphic";
 import Search from "@arcgis/core/widgets/Search";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import * as locator from "@arcgis/core/rest/locator";
+import Locate from "@arcgis/core/widgets/Locate";
 import esriConfig from "@arcgis/core/config";
 
 import styles from "./app.module.css";
@@ -31,10 +32,22 @@ function App() {
         container: mapDiv.current,
       });
 
+      let locateWidget = new Locate({
+        view: view,
+        graphic: new Graphic({
+          symbol: { type: "simple-marker" }
+        })
+      });
+      
+      view.ui.add(locateWidget, "top-right");
+
       const serviceUrl =
       "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
     view.on("click", function (evt) {
+      if (evt.target.classList.contains('.esri-search__submit-button') || ('.esri-menu__list-item')){
+        document.getElementById("root").classList.add('nopointer');
+      } else {
       const params = {
         location: evt.mapPoint,
       };
@@ -47,6 +60,7 @@ function App() {
           showAddress("No address found.", evt.mapPoint);
         }
       );
+      }
     });
 
     function showAddress(address, pt) {
