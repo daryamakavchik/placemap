@@ -22,3 +22,7 @@ body,
 .nopointer{
   pointer-events: none;
 }
+
+.esri .esri-view-surface--inset-outline:focus::after {
+  outline: none !important;
+}

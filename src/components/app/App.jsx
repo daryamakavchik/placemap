@@ -44,10 +44,14 @@ function App() {
       const serviceUrl =
       "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
+
+      const searchButton = document.querySelector('.esri-search__submit-button');
+      const menuItem = document.querySelector('.esri-menu__list-item');
+      
     view.on("click", function (evt) {
-      if (evt.target.classList.contains('.esri-search__submit-button') || ('.esri-menu__list-item')){
-        document.getElementById("root").classList.add('nopointer');
-      } else {
+      evt.stopPropagation();
+      document.getElementsByTagName("body").classList.add('nopointer');
+      {
       const params = {
         location: evt.mapPoint,
       };
@@ -63,6 +67,11 @@ function App() {
       }
     });
 
+    view.on("click", function(event){
+      // event is the event handle returned after the event fires.
+      console.log(event.mapPoint);
+    });
+
     function showAddress(address, pt) {
       view.popup.open({
         title:
@@ -73,21 +82,6 @@ function App() {
         location: pt,
       });
     }
-
-    const routeUrl =
-      "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
-
-      function addGraphic(type, point) {
-        const graphic = new Graphic({
-          symbol: {
-            type: "simple-marker",
-            color: type === "origin" ? "white" : "black",
-            size: "8px",
-          },
-          geometry: point,
-        });
-        view.graphics.add(graphic);
-      }
 
       const search = new Search({
         view: view,
