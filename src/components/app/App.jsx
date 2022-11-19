@@ -43,14 +43,10 @@ function App() {
 
       const serviceUrl =
       "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-
-
-      const searchButton = document.querySelector('.esri-search__submit-button');
-      const menuItem = document.querySelector('.esri-menu__list-item');
       
+      document.body.classList.add('nopointer');
+
     view.on("click", function (evt) {
-      evt.stopPropagation();
-      document.getElementsByTagName("body").classList.add('nopointer');
       {
       const params = {
         location: evt.mapPoint,
@@ -65,11 +61,6 @@ function App() {
         }
       );
       }
-    });
-
-    view.on("click", function(event){
-      // event is the event handle returned after the event fires.
-      console.log(event.mapPoint);
     });
 
     function showAddress(address, pt) {
@@ -111,6 +102,7 @@ function App() {
           .querySelector(".esri-ui-manual-container")
           .classList.remove("overlay");
           view.ui.remove(search);
+          document.body.classList.remove('nopointer');
       });
 
       view.ui.add({
