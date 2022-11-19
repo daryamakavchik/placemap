@@ -8,6 +8,13 @@ body,
   background: rgba(50, 50, 50);
 }
 
-.esri-editor .esri-item-list__scroller {
-  max-height: 350px;
+.widgetcenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.overlay {
+  background-color: rgba(113, 108, 108, 0.7);
 }
