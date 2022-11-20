@@ -9,7 +9,8 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "deploy": "keystone build && keystone prisma migrate deploy",
+    "build": "keystone build",
+    "deploy": "keystone prisma migrate deploy",
     "dev": "keystone dev",
     "postinstall": "keystone postinstall",
     "start": "keystone start"
