@@ -4,6 +4,7 @@ import Map from "@arcgis/core/Map";
 import Graphic from "@arcgis/core/Graphic";
 import Search from "@arcgis/core/widgets/Search";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
+import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
 import esriConfig from "@arcgis/core/config";
@@ -47,19 +48,10 @@ function App() {
       document.body.classList.add('nopointer');
 
     view.on("click", function (evt) {
-      {
-      const params = {
-        location: evt.mapPoint,
-      };
-      locator.locationToAddress(serviceUrl, params).then(
-        function (response) {
-          const address = response.address;
-          showAddress(address, evt.mapPoint);
-        },
-        function (err) {
-          showAddress("No address found.", evt.mapPoint);
-        }
-      );
+      if((Math.round(evt.mapPoint.latitude * 10000) / 10000) !== (Math.round(point.latitude * 10000) / 10000) || (Math.round(evt.mapPoint.longitude * 10000) / 10000) !== (Math.round(point.longitude * 10000) / 10000)) {
+        const params = { location: evt.mapPoint };
+        locator.locationToAddress(serviceUrl, params).then(function (response) { const address = response.address; showAddress(address, evt.mapPoint)},
+          function (err) { showAddress("No address found.", evt.mapPoint)});
       }
     });
 
@@ -140,16 +132,16 @@ function App() {
         Description: "restaurant",
       };
 
-      const popupTemplate = {
+      const popupTemplate = new PopupTemplate({
         title: "{Name}",
         content: "{Description}",
-      };
+      });
 
       const pointGraphic = new Graphic({
         geometry: point,
         symbol: simpleMarkerSymbol,
         attributes: attributes,
-        popupTemplate: popupTemplate,
+        popupTemplate: popupTemplate
       });
       graphicsLayer.add(pointGraphic);
 
