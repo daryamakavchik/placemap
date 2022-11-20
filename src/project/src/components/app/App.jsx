@@ -18,7 +18,6 @@ function App() {
   useEffect(() => {
     if (mapDiv.current) {
 
-
       esriConfig.apiKey =
       "AAPKff271af86e5e4145ae46098747021260kqF_X1V0Z8FSN9TJcZbqceQjUdHGDJ11-hNCPx8t2CVvrp_Lvbd5S64hXMVFd_CO";
 
@@ -33,6 +32,11 @@ function App() {
         container: mapDiv.current,
       });
 
+      view.on('pointer-down', function(evt){
+        console.log(view.zoom);
+      });
+
+
       let locateWidget = new Locate({
         view: view,
         graphic: new Graphic({
@@ -40,7 +44,10 @@ function App() {
         })
       });
       
-      view.ui.add(locateWidget, "top-right");
+      view.ui.add({
+        component: locateWidget,
+        position: "manual",
+      });
 
       const serviceUrl =
       "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
@@ -75,7 +82,7 @@ function App() {
             singleLineFieldName: "SingleLine",
             outFields: ["Addr_type"],
             name: "ArcGIS World Geocoding Service",
-            placeholder: "hello",
+            placeholder: "enter your location",
           //   resultSymbol: {
           //     type: "picture-marker",
           //     url: "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer" + "/images/search/search-symbol-32.png",
@@ -104,6 +111,8 @@ function App() {
 
       view.when(function () {
         search.container.classList.add("widgetcenter");
+        document.querySelector('.esri-locate').classList.add('locatecenter');
+        document.querySelector('.esri-locate').classList.add('zindex');
         document
           .querySelector(".esri-ui-manual-container")
           .classList.add("overlay");

@@ -15,6 +15,13 @@ body,
   transform: translate(-50%, -50%);
 }
 
+.locatecenter{
+  position: absolute;
+  top: 50%;
+  left: calc(((100vw - 240px) / 2) + 260px);
+  transform: translate(-50%, -50%);
+}
+
 .overlay {
   background-color: rgba(113, 108, 108, 0.7);
 }
@@ -25,4 +32,8 @@ body,
 
 .esri .esri-view-surface--inset-outline:focus::after {
   outline: none !important;
+}
+
+.zindex{
+  z-index: 20;
 }
