@@ -7,20 +7,17 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
-import ViewAnimation from "@arcgis/core/views/ViewAnimation";
 import esriConfig from "@arcgis/core/config";
 
 import styles from "./app.module.css";
 
 function App() {
-
   const mapDiv = useRef(null);
 
   useEffect(() => {
     if (mapDiv.current) {
-
       esriConfig.apiKey =
-      "AAPKff271af86e5e4145ae46098747021260kqF_X1V0Z8FSN9TJcZbqceQjUdHGDJ11-hNCPx8t2CVvrp_Lvbd5S64hXMVFd_CO";
+        "AAPKff271af86e5e4145ae46098747021260kqF_X1V0Z8FSN9TJcZbqceQjUdHGDJ11-hNCPx8t2CVvrp_Lvbd5S64hXMVFd_CO";
 
       const map = new Map({
         basemap: "osm-dark-gray",
@@ -33,59 +30,76 @@ function App() {
         container: mapDiv.current,
       });
 
-      view.on('pointer-down', function(evt){
+      view.on("pointer-down", function (evt) {
         console.log(view.zoom);
       });
-
 
       let locateWidget = new Locate({
         view: view,
         graphic: new Graphic({
-          symbol: { type: "simple-marker" }
-        })
+          symbol: { type: "simple-marker" },
+        }),
       });
-      
+
       view.ui.add({
         component: locateWidget,
         position: "manual",
       });
 
-  locateWidget.on("locate", function(locateEvent){
-    document
-    .querySelector(".esri-ui-manual-container")
-    .classList.remove("overlay");
-    view.ui.remove(search);
-    view.ui.remove(locateWidget);
-    document.body.classList.remove('nopointer');
-    const params = { location: locateEvent.position.coords };
-    locator.locationToAddress(serviceUrl, params).then(function (response) { const address = response.address; showAddress(address, locateEvent.position.coords)},
-    function (err) { showAddress("No address found.", evt.mapPoint)});
-  })
-
+      locateWidget.on("locate", function (locateEvent) {
+        document
+          .querySelector(".esri-ui-manual-container")
+          .classList.remove("overlay");
+        view.ui.remove(search);
+        view.ui.remove(locateWidget);
+        document.body.classList.remove("nopointer");
+        const params = { location: locateEvent.position.coords };
+        locator.locationToAddress(serviceUrl, params).then(
+          function (response) {
+            const address = response.address;
+            showAddress(address, locateEvent.position.coords);
+          },
+          function (err) {
+            showAddress("No address found.", evt.mapPoint);
+          }
+        );
+      });
 
       const serviceUrl =
-      "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-      
-      document.body.classList.add('nopointer');
+        "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
-    view.on("click", function (evt) {
-      if((Math.round(evt.mapPoint.latitude * 10000) / 10000) !== (Math.round(point.latitude * 10000) / 10000) || (Math.round(evt.mapPoint.longitude * 10000) / 10000) !== (Math.round(point.longitude * 10000) / 10000)) {
-        const params = { location: evt.mapPoint };
-        locator.locationToAddress(serviceUrl, params).then(function (response) { const address = response.address; showAddress(address, evt.mapPoint)},
-          function (err) { showAddress("No address found.", evt.mapPoint)});
-      }
-    });
+      document.body.classList.add("nopointer");
 
-    function showAddress(address, pt) {
-      view.popup.open({
-        title:
-          +Math.round(pt.longitude * 100000) / 100000 +
-          ", " +
-          Math.round(pt.latitude * 100000) / 100000,
-        content: address,
-        location: pt,
+      view.on("click", function (evt) {
+        if (
+          Math.round(evt.mapPoint.latitude * 10000) / 10000 !==
+            Math.round(point.latitude * 10000) / 10000 ||
+          Math.round(evt.mapPoint.longitude * 10000) / 10000 !==
+            Math.round(point.longitude * 10000) / 10000
+        ) {
+          const params = { location: evt.mapPoint };
+          locator.locationToAddress(serviceUrl, params).then(
+            function (response) {
+              const address = response.address;
+              showAddress(address, evt.mapPoint);
+            },
+            function (err) {
+              showAddress("No address found.", evt.mapPoint);
+            }
+          );
+        }
       });
-    }
+
+      function showAddress(address, pt) {
+        view.popup.open({
+          title:
+            +Math.round(pt.longitude * 100000) / 100000 +
+            ", " +
+            Math.round(pt.latitude * 100000) / 100000,
+          content: address,
+          location: pt,
+        });
+      }
 
       const search = new Search({
         view: view,
@@ -97,15 +111,15 @@ function App() {
             outFields: ["Addr_type"],
             name: "ArcGIS World Geocoding Service",
             placeholder: "enter your location",
-          //   resultSymbol: {
-          //     type: "picture-marker",
-          //     url: "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer" + "/images/search/search-symbol-32.png",
-          //     size: 24,
-          //     width: 24,
-          //     height: 24,
-          //     xoffset: 0,
-          //     yoffset: 0
-          // }
+            //   resultSymbol: {
+            //     type: "picture-marker",
+            //     url: "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer" + "/images/search/search-symbol-32.png",
+            //     size: 24,
+            //     width: 24,
+            //     height: 24,
+            //     xoffset: 0,
+            //     yoffset: 0
+            // }
           },
         ],
       });
@@ -114,8 +128,8 @@ function App() {
         document
           .querySelector(".esri-ui-manual-container")
           .classList.remove("overlay");
-          view.ui.remove(search);
-          document.body.classList.remove('nopointer');
+        view.ui.remove(search);
+        document.body.classList.remove("nopointer");
       });
 
       view.ui.add({
@@ -125,8 +139,8 @@ function App() {
 
       view.when(function () {
         search.container.classList.add("widgetcenter");
-        document.querySelector('.esri-locate').classList.add('locatecenter');
-        document.querySelector('.esri-locate').classList.add('zindex');
+        document.querySelector(".esri-locate").classList.add("locatecenter");
+        document.querySelector(".esri-locate").classList.add("zindex");
         document
           .querySelector(".esri-ui-manual-container")
           .classList.add("overlay");
@@ -164,10 +178,9 @@ function App() {
         geometry: point,
         symbol: simpleMarkerSymbol,
         attributes: attributes,
-        popupTemplate: popupTemplate
+        popupTemplate: popupTemplate,
       });
       graphicsLayer.add(pointGraphic);
-
     }
   }, []);
 
