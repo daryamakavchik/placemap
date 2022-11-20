@@ -6,7 +6,7 @@ export default config({
         useMigrations: true,
         provider: 'mysql',
         idField: { kind: 'uuid' },
-        url: 'mysql://doadmin:AVNS_GX8DqRvHB60k7XxNqug@db-mysql-sfo2-14479-do-user-3665123-0.b.db.ondigitalocean.com:25060/placemap?ssl-mode=REQUIRED',
+        url: 'mysql://doadmin:AVNS_GX8DqRvHB60k7XxNqug@private-db-mysql-sfo2-14479-do-user-3665123-0.b.db.ondigitalocean.com:25060/placemap?ssl-mode=REQUIRED',
     },
     storage: {
         s3: {
