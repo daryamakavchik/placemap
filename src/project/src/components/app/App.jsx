@@ -7,6 +7,7 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
+import ViewAnimation from "@arcgis/core/views/ViewAnimation";
 import esriConfig from "@arcgis/core/config";
 
 import styles from "./app.module.css";
@@ -48,6 +49,19 @@ function App() {
         component: locateWidget,
         position: "manual",
       });
+
+  locateWidget.on("locate", function(locateEvent){
+    document
+    .querySelector(".esri-ui-manual-container")
+    .classList.remove("overlay");
+    view.ui.remove(search);
+    view.ui.remove(locateWidget);
+    document.body.classList.remove('nopointer');
+    const params = { location: locateEvent.position.coords };
+    locator.locationToAddress(serviceUrl, params).then(function (response) { const address = response.address; showAddress(address, locateEvent.position.coords)},
+    function (err) { showAddress("No address found.", evt.mapPoint)});
+  })
+
 
       const serviceUrl =
       "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
