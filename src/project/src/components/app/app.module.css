@@ -1,3 +1,12 @@
 .webmap{
     height: 100vh;
 }
+
+.graphic:hover{
+    opacity: 0.6;
+    z-index: 1000;
+}
+
+.popup{
+    height: 700px;
+}

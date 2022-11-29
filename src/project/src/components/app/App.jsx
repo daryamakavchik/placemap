@@ -8,6 +8,7 @@ import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
 import esriConfig from "@arcgis/core/config";
+import { PopupContent } from "./content";
 
 import styles from "./app.module.css";
 
@@ -30,9 +31,9 @@ function App() {
         container: mapDiv.current,
       });
 
-      view.on("pointer-down", function (evt) {
-        console.log(view.zoom);
-      });
+      // view.on("pointer-down", function (evt) {
+      //   console.log(view.zoom);
+      // });
 
       let locateWidget = new Locate({
         view: view,
@@ -88,6 +89,23 @@ function App() {
             }
           );
         }
+      });
+
+      view.on("pointer-move", function (event) {
+        view.hitTest(event).then(function (response) {
+          if (response.results.length) {
+            var graphic = response.results.filter(function (result) {
+              return result.graphic.layer === graphicsLayer;
+            })[0].graphic;
+            view.popup.open({
+              location: graphic.geometry.centroid,
+              features: [graphic],
+            });
+          }
+          // else {
+          //   view.popup.close();
+          // }
+        });
       });
 
       function showAddress(address, pt) {
@@ -157,10 +175,9 @@ function App() {
 
       const simpleMarkerSymbol = {
         type: "simple-marker",
-        color: [226, 119, 40],
+        color: [226, 119, 40, 0.5],
         outline: {
-          color: [255, 255, 255],
-          width: 1,
+          width: 0,
         },
       };
 
@@ -171,7 +188,12 @@ function App() {
 
       const popupTemplate = new PopupTemplate({
         title: "{Name}",
-        content: "{Description}",
+        content: function () {
+          var div = document.createElement("div");
+          div.className = "myClass";
+          div.innerHTML = "<span>My custom content!</span>";
+          return div;
+        },
       });
 
       const pointGraphic = new Graphic({
