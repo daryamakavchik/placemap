@@ -8,6 +8,7 @@ import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
 import esriConfig from "@arcgis/core/config";
+import met from '../../images/meteora.png';
 
 import styles from "./app.module.css";
 
@@ -189,8 +190,8 @@ function App() {
         title: "{Name}",
         content: function () {
           var div = document.createElement("div");
-          div.className = "myClass";
-          div.innerHTML = "<span>My custom content!</span>";
+          div.className = styles.class;
+          //div.innerHTML = `<img src=${met} className=${styles.img} />`;
           return div;
         },
       });
