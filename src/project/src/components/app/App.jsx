@@ -8,7 +8,6 @@ import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
 import esriConfig from "@arcgis/core/config";
-import { PopupContent } from "./content";
 
 import styles from "./app.module.css";
 
