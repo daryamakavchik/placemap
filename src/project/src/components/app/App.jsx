@@ -1,28 +1,34 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import MapView from "@arcgis/core/views/MapView";
 import Map from "@arcgis/core/Map";
 import Graphic from "@arcgis/core/Graphic";
 import Search from "@arcgis/core/widgets/Search";
-import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import PopupTemplate from "@arcgis/core/PopupTemplate";
 import * as locator from "@arcgis/core/rest/locator";
 import Locate from "@arcgis/core/widgets/Locate";
 import esriConfig from "@arcgis/core/config";
-import met from '../../images/meteora.png';
-
+import meteora from "../../images/meteora.png";
+import daedo from "../../images/daedo.jpeg";
+import kinn from "../../images/kin.jpeg";
+import steep from "../../images/steep.jpeg";
 import styles from "./app.module.css";
 
 function App() {
-  const mapDiv = useRef(null);
+  const [pointState, setPointState] = useState({
+    Name: "Meteora",
+    Description: "restaurant",
+    LATITUDE: 34.084543364219606,
+    LONGITUDE: -118.33987522698867,
+    image: meteora,
+  });
 
+  const mapDiv = useRef(null);
   useEffect(() => {
     if (mapDiv.current) {
       esriConfig.apiKey =
         "AAPKff271af86e5e4145ae46098747021260kqF_X1V0Z8FSN9TJcZbqceQjUdHGDJ11-hNCPx8t2CVvrp_Lvbd5S64hXMVFd_CO";
-
-      const map = new Map({
-        basemap: "osm-dark-gray",
-      });
+      const map = new Map({ basemap: "osm-dark-gray" });
 
       const view = new MapView({
         map: map,
@@ -31,9 +37,7 @@ function App() {
         container: mapDiv.current,
       });
 
-      // view.on("pointer-down", function (evt) {
-      //   console.log(view.zoom);
-      // });
+      document.body.classList.add("nopointer");
 
       let locateWidget = new Locate({
         view: view,
@@ -41,12 +45,10 @@ function App() {
           symbol: { type: "simple-marker" },
         }),
       });
-
       view.ui.add({
         component: locateWidget,
         position: "manual",
       });
-
       locateWidget.on("locate", function (locateEvent) {
         document
           .querySelector(".esri-ui-manual-container")
@@ -69,45 +71,18 @@ function App() {
       const serviceUrl =
         "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
-      document.body.classList.add("nopointer");
-
       view.on("click", function (evt) {
-        if (
-          Math.round(evt.mapPoint.latitude * 10000) / 10000 !==
-            Math.round(point.latitude * 10000) / 10000 ||
-          Math.round(evt.mapPoint.longitude * 10000) / 10000 !==
-            Math.round(point.longitude * 10000) / 10000
-        ) {
-          const params = { location: evt.mapPoint };
-          locator.locationToAddress(serviceUrl, params).then(
-            function (response) {
-              const address = response.address;
-              showAddress(address, evt.mapPoint);
-            },
-            function (err) {
-              showAddress("No address found.", evt.mapPoint);
-            }
-          );
-        }
-      });
-
-      view.on("pointer-move", function (event) {
-        view.hitTest(event).then(function (response) {
-          if (response.results.length) {
-            var graphic = response.results.filter(function (result) {
-              return result.graphic.layer === graphicsLayer;
-            })[0].graphic;
-            view.popup.open({
-              location: graphic.geometry.centroid,
-              features: [graphic],
-            });
+        const params = { location: evt.mapPoint };
+        locator.locationToAddress(serviceUrl, params).then(
+          function (response) {
+            const address = response.address;
+            showAddress(address, evt.mapPoint);
+          },
+          function (err) {
+            showAddress("No address found.", evt.mapPoint);
           }
-          // else {
-          //   view.popup.close();
-          // }
-        });
+        );
       });
-
       function showAddress(address, pt) {
         view.popup.open({
           title:
@@ -129,32 +104,13 @@ function App() {
             outFields: ["Addr_type"],
             name: "ArcGIS World Geocoding Service",
             placeholder: "enter your location",
-            //   resultSymbol: {
-            //     type: "picture-marker",
-            //     url: "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer" + "/images/search/search-symbol-32.png",
-            //     size: 24,
-            //     width: 24,
-            //     height: 24,
-            //     xoffset: 0,
-            //     yoffset: 0
-            // }
           },
         ],
       });
-
-      view.popup.watch("visible", function (visible) {
-        document
-          .querySelector(".esri-ui-manual-container")
-          .classList.remove("overlay");
-        view.ui.remove(search);
-        document.body.classList.remove("nopointer");
-      });
-
       view.ui.add({
         component: search,
         position: "manual",
       });
-
       view.when(function () {
         search.container.classList.add("widgetcenter");
         document.querySelector(".esri-locate").classList.add("locatecenter");
@@ -163,46 +119,124 @@ function App() {
           .querySelector(".esri-ui-manual-container")
           .classList.add("overlay");
       });
+      view.popup.watch("visible", function (visible) {
+        document
+          .querySelector(".esri-ui-manual-container")
+          .classList.remove("overlay");
+        view.ui.remove(search);
+        document.body.classList.remove("nopointer");
+      });
 
-      const graphicsLayer = new GraphicsLayer();
-      map.add(graphicsLayer);
-
-      const point = {
-        type: "point",
-        longitude: -118.33987522698867,
-        latitude: 34.084543364219606,
-      };
-
-      const simpleMarkerSymbol = {
-        type: "simple-marker",
-        color: [226, 119, 40, 0.5],
-        outline: {
-          width: 0,
+      let data = [
+        {
+          Name: "Meteora",
+          Description: "restaurant",
+          LATITUDE: 34.08451193448912,
+          LONGITUDE: -118.33992004394125,
+          image: meteora,
+          index: 1,
         },
-      };
+        {
+          Name: "Kinn LA",
+          Description: "restaurant",
+          LATITUDE: 34.06439220871661,
+          LONGITUDE: -118.30807685851646,
+          image: kinn,
+          index: 2,
+        },
+        {
+          Name: "STEEP LA",
+          Description: "restaurant",
+          LATITUDE: 34.06688077298084,
+          LONGITUDE: -118.23572158813074,
+          image: steep,
+          index: 3,
+        },
+        {
+          Name: "Daedo Sikdang",
+          Description: "restaurant",
+          LATITUDE: 34.064463311566975,
+          LONGITUDE: -118.31078052520347,
+          image: daedo,
+          index: 4,
+        },
+      ];
 
-      const attributes = {
-        Name: "Meteora",
-        Description: "restaurant",
-      };
+      let graphics = [];
+      for (let i = 0; i < data.length; i++) {
+        let graphic = new Graphic({
+          geometry: {
+            type: "point",
+            latitude: data[i].LATITUDE,
+            longitude: data[i].LONGITUDE,
+          },
+          attributes: data[i],
+        });
+        graphics.push(graphic);
+      }
 
-      const popupTemplate = new PopupTemplate({
-        title: "{Name}",
-        content: function () {
-          var div = document.createElement("div");
+      view.on("pointer-move", function (event) {
+        view.hitTest(event).then(function (response) {
+          if (response.results.length) {
+            var graphic = response.results.filter(function (result) {
+              return result.graphic.layer === layer;
+            })[0].graphic;
+            view.popup.open({
+              location: event.mapPoint,
+              features: [graphic],
+            });
+          }
+        });
+      });
+
+      let popupTemplate = new PopupTemplate({
+        title: () =>
+          `${
+            data.filter(
+              (el) => view.popup.features[0].attributes.OBJECTID === el.OBJECTID
+            )[0].Name
+          }`,
+        content: () => {
+          let div = document.createElement("div");
           div.className = styles.class;
-          //div.innerHTML = `<img src=${met} className=${styles.img} />`;
+          div.style.backgroundImage = `url(${
+            data.filter(
+              (el) => view.popup.features[0].attributes.OBJECTID === el.OBJECTID
+            )[0].image
+          })`;
           return div;
         },
       });
 
-      const pointGraphic = new Graphic({
-        geometry: point,
-        symbol: simpleMarkerSymbol,
-        attributes: attributes,
+      const layer = new FeatureLayer({
+        source: graphics,
+        objectIdField: "OBJECTID",
         popupTemplate: popupTemplate,
+        fields: [
+          {
+            name: "OBJECTID",
+            type: "oid",
+          },
+          {
+            name: "image",
+            type: "string",
+          },
+        ],
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "text",
+            color: "#7A003C",
+            text: "\ue661",
+            font: {
+              size: 20,
+              family: "CalciteWebCoreIcons",
+            },
+          },
+        },
       });
-      graphicsLayer.add(pointGraphic);
+
+      map.add(layer);
     }
   }, []);
 
