@@ -12,9 +12,30 @@
 }
 
 .class{
-    width: 430px;
+    width: 440px;
     height: 400px;
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+.closebutton{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: 0;
+    pointer-events: all;
+}
+
+.closebutton:hover{
+    cursor: pointer;
+}
+
+.closeicon{
+    width: 30px;
+    height: 30px;
 }
