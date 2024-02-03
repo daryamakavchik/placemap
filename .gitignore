@@ -1,3 +1,4 @@
 node_modules
 .keystone
 .vscode
+.DS_Store
