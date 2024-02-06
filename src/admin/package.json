@@ -5,14 +5,16 @@
   "repository": "https://github.com/daryamakavchik/placemap/src/admin",
   "license": "MIT",
   "dependencies": {
-    "@keystone-6/core": "^3.0.2",
-    "typescript": "^4.8.4"
+    "@keystone-6/core": "^5.7.1",
+    "dotenv": "^16.4.1",
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "build": "keystone build",
-    "deploy": "keystone prisma migrate deploy",
     "dev": "keystone dev",
     "postinstall": "keystone postinstall",
-    "start": "keystone start"
+    "generate": "keystone prisma migrate dev",
+    "start": "keystone start --with-migrations",
+    "deploy": "keystone build && keystone prisma migrate deploy"
   }
 }

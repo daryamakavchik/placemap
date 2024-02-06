@@ -13,7 +13,7 @@ export const Place = list({
         longitude: float({
             validation: { isRequired: true }
         }),
-        images: relationship({ ref: 'Photo', many: true })
+        images: relationship({ ref: 'Photo.place', many: true })
     },
     access: allowAll
 });

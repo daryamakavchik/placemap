@@ -1,21 +1,40 @@
 import { config } from '@keystone-6/core';
 import { Photo, Place } from './lists';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const {
+    S3_BUCKET_NAME: s3BucketName = '',
+    S3_REGION: s3Region = '',
+    S3_ACCESS_KEY_ID: s3AccessKeyId = '',
+    S3_SECRET_ACCESS_KEY: s3SecretAccessKey = '',
+  } = process.env;
+
+const {
+    MYSQL_HOST: mysqlHost = '',
+    MYSQL_PORT: mysqlPort = '',
+    MYSQL_USER: mysqlUser = '',
+    MYSQL_PASSWORD: mysqlPassword = '',
+    MYSQL_DATABASE: defaultdb = '',
+    MYSQL_URL: mysqlUrl = 'mysql://root:rootpass@localhost:3306/placemap',
+} = process.env;
 
 export default config({
     db: {
         useMigrations: true,
         provider: 'mysql',
         idField: { kind: 'uuid' },
-        url: 'mysql://doadmin:AVNS_GX8DqRvHB60k7XxNqug@db-mysql-sfo2-14479-do-user-3665123-0.b.db.ondigitalocean.com:25060/placemap?ssl-mode=REQUIRED',
+        url: mysqlUrl,
     },
     storage: {
         s3: {
             kind: 's3',
             type: 'image',
-            bucketName: 'placemap',
-            region: 'us-west-1',
-            accessKeyId: 'AKIAX4HEJQFNDHSX7SQA',
-            secretAccessKey: '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',
+            bucketName: s3BucketName,
+            region: s3Region,
+            accessKeyId: s3AccessKeyId,
+            secretAccessKey: s3SecretAccessKey,
             signed: { expiry: 5000 },
         }
     },

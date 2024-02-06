@@ -6,7 +6,7 @@ type Place {
   name: String
   latitude: Float
   longitude: Float
-  images(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0): [Photo!]
+  images(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   imagesCount(where: PhotoWhereInput! = {}): Int
 }
 
@@ -127,6 +127,7 @@ input PhotoRelateToManyForCreateInput {
 type Photo {
   id: ID!
   image: ImageFieldOutput
+  place: Place
 }
 
 type ImageFieldOutput {
@@ -154,6 +155,7 @@ input PhotoWhereInput {
   OR: [PhotoWhereInput!]
   NOT: [PhotoWhereInput!]
   id: IDFilter
+  place: PlaceWhereInput
 }
 
 input PhotoOrderByInput {
@@ -162,6 +164,7 @@ input PhotoOrderByInput {
 
 input PhotoUpdateInput {
   image: ImageFieldInput
+  place: PlaceRelateToOneForUpdateInput
 }
 
 input ImageFieldInput {
@@ -171,6 +174,12 @@ input ImageFieldInput {
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
+input PlaceRelateToOneForUpdateInput {
+  create: PlaceCreateInput
+  connect: PlaceWhereUniqueInput
+  disconnect: Boolean
+}
+
 input PhotoUpdateArgs {
   where: PhotoWhereUniqueInput!
   data: PhotoUpdateInput!
@@ -178,6 +187,12 @@ input PhotoUpdateArgs {
 
 input PhotoCreateInput {
   image: ImageFieldInput
+  place: PlaceRelateToOneForCreateInput
+}
+
+input PlaceRelateToOneForCreateInput {
+  create: PlaceCreateInput
+  connect: PlaceWhereUniqueInput
 }
 
 """
@@ -201,10 +216,10 @@ type Mutation {
 }
 
 type Query {
-  places(where: PlaceWhereInput! = {}, orderBy: [PlaceOrderByInput!]! = [], take: Int, skip: Int! = 0): [Place!]
+  places(where: PlaceWhereInput! = {}, orderBy: [PlaceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PlaceWhereUniqueInput): [Place!]
   place(where: PlaceWhereUniqueInput!): Place
   placesCount(where: PlaceWhereInput! = {}): Int
-  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0): [Photo!]
+  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photo(where: PhotoWhereUniqueInput!): Photo
   photosCount(where: PhotoWhereInput! = {}): Int
   keystone: KeystoneMeta!
@@ -234,9 +249,10 @@ type KeystoneAdminUIListMeta {
   pageSize: Int!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
+  groups: [KeystoneAdminUIFieldGroupMeta!]!
   initialSort: KeystoneAdminUISort
   isHidden: Boolean!
-  isSingleton: Boolean
+  isSingleton: Boolean!
 }
 
 type KeystoneAdminUIFieldMeta {
@@ -245,6 +261,7 @@ type KeystoneAdminUIFieldMeta {
   description: String
   isOrderable: Boolean!
   isFilterable: Boolean!
+  isNonNull: [KeystoneAdminUIFieldMetaIsNonNull!]
   fieldMeta: JSON
   viewsIndex: Int!
   customViewsIndex: Int
@@ -252,6 +269,12 @@ type KeystoneAdminUIFieldMeta {
   listView: KeystoneAdminUIFieldMetaListView!
   itemView(id: ID): KeystoneAdminUIFieldMetaItemView
   search: QueryMode
+}
+
+enum KeystoneAdminUIFieldMetaIsNonNull {
+  read
+  create
+  update
 }
 
 type KeystoneAdminUIFieldMetaCreateView {
@@ -274,6 +297,7 @@ enum KeystoneAdminUIFieldMetaListViewFieldMode {
 
 type KeystoneAdminUIFieldMetaItemView {
   fieldMode: KeystoneAdminUIFieldMetaItemViewFieldMode
+  fieldPosition: KeystoneAdminUIFieldMetaItemViewFieldPosition
 }
 
 enum KeystoneAdminUIFieldMetaItemViewFieldMode {
@@ -282,9 +306,20 @@ enum KeystoneAdminUIFieldMetaItemViewFieldMode {
   hidden
 }
 
+enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
+  form
+  sidebar
+}
+
 enum QueryMode {
   default
   insensitive
+}
+
+type KeystoneAdminUIFieldGroupMeta {
+  label: String!
+  description: String
+  fields: [KeystoneAdminUIFieldMeta!]!
 }
 
 type KeystoneAdminUISort {
